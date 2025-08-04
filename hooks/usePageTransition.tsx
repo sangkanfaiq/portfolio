@@ -122,7 +122,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 						style={{
 							width: "100%",
 							position: "fixed",
-							height: "100dvh",
+							height: "100vh",
 							left: 0,
 							top: 0,
 							backgroundImage: "url(/images/bg-2.jpg)",
