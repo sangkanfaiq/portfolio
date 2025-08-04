@@ -44,8 +44,8 @@ export const experiencesCompany = [
 		id: 4,
 		company: "PT Sanaco Cahaya Rasa",
 		role: "Web Developer / Internship",
-		start: "June 2023",
-		end: "August 2023"
+		start: "June 2020",
+		end: "August 2020"
 	},
 ]
 export const menuItems = [
