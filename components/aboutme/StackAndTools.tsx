@@ -14,12 +14,12 @@ const StacksAndTools = () => {
 	return (
 		<Flex data-aos="fade-up" data-aos-offset="100" justify="space-around" style={{ width: "100%" }}>
 			<Flex vertical align="center" style={{ maxWidth: "500px", textAlign: "center" }}>
-				<p className="font-regular text-xs color-secondary">TOOLS I USE</p>
+				<p className="font-regular text-xs color-secondary">SKILLS</p>
 				<Flex wrap gap="middle" justify="center" style={{ marginTop: 10 }}>
 					<EachItems
-						data={tools}
+						data={skills}
 						render={(item, index) => {
-							const isLast = index === tools.length - 1;
+							const isLast = index === skills.length - 1;
 							return (
 								<React.Fragment key={index}>
 									<span className="font-bold text-reg">{item}</span>
@@ -32,12 +32,12 @@ const StacksAndTools = () => {
 			</Flex>
 
 			<Flex vertical align="center" style={{ maxWidth: "500px", textAlign: "center" }}>
-				<p className="font-regular text-xs color-secondary">SKILLS</p>
+				<p className="font-regular text-xs color-secondary">TOOLS I USE</p>
 				<Flex wrap gap="middle" justify="center" style={{ marginTop: 10 }}>
 					<EachItems
-						data={skills}
+						data={tools}
 						render={(item, index) => {
-							const isLast = index === skills.length - 1;
+							const isLast = index === tools.length - 1;
 							return (
 								<React.Fragment key={index}>
 									<span className="font-bold text-reg">{item}</span>
