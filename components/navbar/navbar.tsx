@@ -1,6 +1,6 @@
 "use client";
 import { introduction, menuItems } from "@/data";
-import { Flex, Typography } from "antd";
+import { Flex, Grid, Typography } from "antd";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence, Variants, Transition } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
@@ -119,7 +119,7 @@ const STYLES: StylesConfig = {
 	overlay: {
 		width: "100%",
 		position: "fixed" as const,
-		height: "100dvh",
+		height: "100vh",
 		left: 0,
 		top: 0,
 		backgroundColor: "#0f141e",
@@ -194,6 +194,7 @@ const useScrollLock = (isLocked: boolean): void => {
 const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 	const [isHovered, setIsHovered] = useState(false);
 	const { navigateWithTransition } = usePageTransition();
+	const screens = Grid.useBreakpoint()
 
 	const handleTitleClick = () => {
 		if (!isActive) {
@@ -205,7 +206,7 @@ const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 		<Flex
 			vertical
 			style={{
-				opacity: isHovered ? 0.7 : 1,
+				opacity: isHovered ? 0.7 : !screens.md ? 0 : 1,
 				cursor: isHovered ? "pointer" : "",
 				transition: "opacity 0.3s ease",
 			}}
