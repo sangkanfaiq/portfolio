@@ -4,7 +4,7 @@ import "hamburgers/dist/hamburgers.css";
 import "aos/dist/aos.css";
 
 import localFont from "next/font/local";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import { PageTransitionProvider } from "@/hooks/usePageTransition";
 
 const HELVETICA_THIN = localFont({
