@@ -72,7 +72,7 @@ export default function RootLayout({
 			<body>
 				<PageTransitionProvider>
 					<Navbar />
-					{children}
+					<div className="body-side">{children}</div>
 				</PageTransitionProvider>
 			</body>
 		</html>
