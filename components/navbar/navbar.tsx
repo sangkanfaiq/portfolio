@@ -140,10 +140,9 @@ const STYLES: StylesConfig = {
 		color: "#878a8f",
 		marginBottom: "20px",
 		letterSpacing: ".4em",
+		fontSize: ".875rem",
 	},
 	menuItem: {
-		fontSize: "3.25rem",
-		lineHeight: "4.0625rem",
 		cursor: "pointer",
 		color: "#878a8f",
 	},
@@ -194,7 +193,7 @@ const useScrollLock = (isLocked: boolean): void => {
 const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 	const [isHovered, setIsHovered] = useState(false);
 	const { navigateWithTransition } = usePageTransition();
-	const screens = Grid.useBreakpoint()
+	const screens = Grid.useBreakpoint();
 
 	const handleTitleClick = () => {
 		if (!isActive) {
@@ -206,9 +205,10 @@ const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 		<Flex
 			vertical
 			style={{
-				opacity: isHovered ? 0.7 : !screens.md ? 0 : 1,
+				opacity: isHovered ? 0.7 : 1,
 				cursor: isHovered ? "pointer" : "",
 				transition: "opacity 0.3s ease",
+				display: !screens.md ? "none" : "flex",
 			}}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
@@ -238,25 +238,29 @@ const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 	);
 };
 
-const MenuButton: React.FC<{ isActive: boolean; isAnimating: boolean; onClick: () => void }> = ({ isActive, isAnimating, onClick }) => (
-	<Flex className="menu-wrap" onClick={isAnimating ? undefined : onClick}>
-		<h1
-			className="font-bold menu-text"
-			style={{
-				color: isActive ? "#878a8f" : "",
-				transition: "color 0.3s ease",
-				transitionDelay: isActive ? "0.4s" : "0s",
-			}}
-		>
-			MENU
-		</h1>
-		<div className={`hamburger hamburger--collapse ${isActive ? "is-active" : ""}`}>
-			<div className="hamburger-box">
-				<div className={`hamburger-inner ${isActive ? "active" : ""}`}></div>
+const MenuButton: React.FC<{ isActive: boolean; isAnimating: boolean; onClick: () => void }> = ({ isActive, isAnimating, onClick }) => {
+	const screens = Grid.useBreakpoint();
+	return (
+		<Flex className="menu-wrap" onClick={isAnimating ? undefined : onClick}>
+			<h1
+				className="font-bold menu-text"
+				style={{
+					color: isActive ? "#878a8f" : "",
+					transition: "color 0.3s ease",
+					transitionDelay: isActive ? "0.4s" : "0s",
+					display: !screens.md ? "none" : "block",
+				}}
+			>
+				MENU
+			</h1>
+			<div className={`hamburger hamburger--collapse ${isActive ? "is-active" : ""}`}>
+				<div className="hamburger-box">
+					<div className={`hamburger-inner ${isActive ? "active" : ""}`}></div>
+				</div>
 			</div>
-		</div>
-	</Flex>
-);
+		</Flex>
+	);
+};
 
 const MenuOverlay: React.FC<{ isActive: boolean; onExitComplete: () => void }> = ({ isActive, onExitComplete }) => (
 	<AnimatePresence mode="wait" onExitComplete={onExitComplete}>
@@ -280,6 +284,7 @@ const MenuContent: React.FC<{
 	onClick: (path: string, blank: boolean) => void;
 }> = ({ isActive, onAnimationStart, onAnimationComplete, onClick }) => {
 	const pathname = usePathname();
+	const screens = Grid.useBreakpoint();
 
 	return (
 		<AnimatePresence
@@ -323,6 +328,7 @@ const MenuContent: React.FC<{
 										}}
 										style={{
 											...STYLES.menuItem,
+											fontSize: screens.md ? "3.25rem" : "2.125rem",
 											color: pathname === item.path ? "#fff" : STYLES.menuItem.color,
 										}}
 										onClick={() => onClick(item.path, item.blank)}
@@ -343,6 +349,7 @@ const Navbar: React.FC = () => {
 	const [isActive, setIsActive] = useState<boolean>(false);
 	const [isAnimating, setIsAnimating] = useState<boolean>(false);
 	const { navigateWithTransition, isTransitioning } = usePageTransition();
+	const screens = Grid.useBreakpoint();
 
 	useScrollLock(isActive);
 
@@ -374,7 +381,7 @@ const Navbar: React.FC = () => {
 
 	return (
 		<>
-			<Flex justify="space-between" className="navbar-section">
+			<Flex justify={!screens.md ? "flex-end" : "space-between"} className="navbar-section">
 				<NavbarTitle isActive={isActive} />
 				<MenuButton isActive={isActive} isAnimating={isAnimating} onClick={handleMenu} />
 			</Flex>
