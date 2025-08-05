@@ -12,7 +12,7 @@ const AboutPage = () => {
 	const screens = Grid.useBreakpoint()
 	return (
 		<main style={{ paddingTop: screens.md ? 165 : 72 }}>
-			<Description title={aboutMe.title} delayTitle="200" delayDesc="250" delaySub="300" description={aboutMe.description} subdescription={aboutMe.subdescription} />
+			<Description title={aboutMe.title} description={aboutMe.description} subdescription={aboutMe.subdescription} />
 			<CarouselSection />
 			<StacksAndTools />
 			<Divider style={{ margin: "108px 0" }} />
