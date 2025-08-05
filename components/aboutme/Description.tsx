@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Flex, Grid, Typography } from "antd";
 import React, { useEffect } from "react";
 import AOS from "aos";
 
@@ -10,10 +10,12 @@ interface DescriptionInterface {
 	delayTitle?: string;
 	delayDesc?: string;
 	delaySub?: string;
-	duration?: string
+	duration?: string;
 }
 
 const Description = ({ title, description, subdescription, delayTitle, delayDesc, delaySub }: DescriptionInterface) => {
+	const screens = Grid.useBreakpoint();
+
 	useEffect(() => {
 		AOS.init({
 			duration: 600,
@@ -22,14 +24,14 @@ const Description = ({ title, description, subdescription, delayTitle, delayDesc
 	}, []);
 	return (
 		<Flex justify="center" align="center" vertical>
-			<Flex vertical align="center" style={{textAlign: "center" }}>
+			<Flex vertical align={screens.md ? "center" : "flex-start"} style={{ textAlign: screens.md ? "center" : "left" }}>
 				<Typography.Text data-aos="fade-up" data-aos-delay={delayTitle} className="font-regular text-xs color-secondary">
 					{title}
 				</Typography.Text>
-				<h1 data-aos="fade-up" data-aos-delay={delayDesc} className="font-bold text-med color-primary" style={{width: '80%', marginTop: 5}}>
+				<h1 data-aos="fade-up" data-aos-delay={delayDesc} className="font-bold text-med color-primary" style={{ width: screens.md ? "80%" : "100%", marginTop: 5 }}>
 					{description}
 				</h1>
-				<p data-aos="fade-up" data-aos-delay={delaySub} className="font-medium text-reg color-secondary" style={{width: '70%', marginTop: 25}}>
+				<p data-aos="fade-up" data-aos-delay={delaySub} className="font-medium text-reg color-secondary" style={{ width: screens.md ? "70%" : "100%", marginTop: 25 }}>
 					{subdescription}
 				</p>
 			</Flex>
