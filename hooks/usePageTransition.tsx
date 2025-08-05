@@ -35,16 +35,17 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 				setTargetPath("/");
 				setIsTransitioning(true);
 				setIsLoading(true);
+				setShowText(true); // Show text immediately for first visit
 
 				timeoutRef.current = setTimeout(() => {
-					// Start text exit animation first
 					setIsTextExiting(true);
 
-					// Hide text after animation completes (300ms)
+					// Hide text after animation completes
 					textExitTimeoutRef.current = setTimeout(() => {
 						setShowText(false);
 						setIsTextExiting(false);
 						setIsLoading(false);
+						// Trigger the exit animation by setting isTransitioning to false
 						setIsTransitioning(false);
 						setIsFirstVisit(false);
 					}, 200);
@@ -163,6 +164,9 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 		return "Wait a bit";
 	};
 
+	// Determine if this is the first visit animation
+	const isFirstVisitAnimation = isFirstVisit && targetPath === "/";
+
 	return (
 		<PageTransitionContext.Provider value={{ navigateWithTransition, isTransitioning }}>
 			{children}
@@ -176,11 +180,14 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 				{isTransitioning && (
 					<motion.div
 						key="overlay"
-						initial={{ y: "100%" }}
+						initial={isFirstVisitAnimation ? { y: "0%" } : { y: "100%" }}
 						animate={{ y: "0%" }}
 						exit={{ y: "-100%" }}
-						onAnimationComplete={() => setShowText(true)}
-						transition={{ duration: 0.5, ease: "easeInOut" }}
+						onAnimationComplete={() => !isFirstVisitAnimation && setShowText(true)}
+						transition={{
+							duration: 0.5,
+							ease: "easeInOut",
+						}}
 						style={{
 							width: "100%",
 							position: "fixed",
@@ -204,7 +211,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 								width: "100%",
 								height: "100%",
 								backgroundColor: "#0f141e",
-								opacity: 0.95,
+								opacity: 0.94,
 								zIndex: -1,
 							}}
 						/>
