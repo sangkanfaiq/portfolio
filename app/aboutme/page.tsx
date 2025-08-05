@@ -5,12 +5,13 @@ import DescriptionChildren from "@/components/aboutme/DescriptionChildren";
 import Experiences from "@/components/aboutme/Experiences";
 import StacksAndTools from "@/components/aboutme/StackAndTools";
 import { aboutMe, experiences } from "@/data";
-import { Divider } from "antd";
+import { Divider, Grid } from "antd";
 import React from "react";
 
 const AboutPage = () => {
+	const screens = Grid.useBreakpoint()
 	return (
-		<main style={{ paddingTop: 165 }}>
+		<main style={{ paddingTop: screens.md ? 165 : 72 }}>
 			<Description title={aboutMe.title} delayTitle="200" delayDesc="250" delaySub="300" description={aboutMe.description} subdescription={aboutMe.subdescription} />
 			<CarouselSection />
 			<StacksAndTools />
