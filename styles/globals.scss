@@ -4,8 +4,12 @@
 	margin: 0;
 }
 
-body {
+.body-side {
 	padding: 40px;
+
+	@media (max-width: 768px) {
+		padding: 12px;
+	}
 }
 
 // LOCAL FONT CONFIGURATION
@@ -39,9 +43,12 @@ body {
 .color-secondary {
 	color: #878a8f;
 }
-
 .text-lg {
 	font-size: 3.875rem;
+
+	@media (max-width: 768px) {
+		font-size: 2.125rem;
+	}
 }
 .text-xs {
 	font-size: 0.875rem;
@@ -52,14 +59,22 @@ body {
 }
 .text-reg {
 	font-size: 1.375rem;
+
+	@media (max-width: 768px) {
+		font-size: 1.125rem;
+	}
 }
 .text-med {
 	font-size: 2.75rem;
-}
 
+	@media (max-width: 768px) {
+		font-size: 2.125rem;
+	}
+}
+.header-margin {
+	padding: 30px 0;
+}
 .navbar-section {
-	display: flex;
-	justify-content: space-between;
 	width: 100%;
 	text-transform: uppercase;
 	position: fixed;
@@ -70,7 +85,7 @@ body {
 	width: 100%;
 
 	@media (max-width: 768px) {
-		padding: 0 12px 0 12px;
+		padding: 12px;
 	}
 
 	.nav-title {
@@ -120,34 +135,55 @@ body {
 
 .intro {
 	width: 100%;
-	height: 100vh;
+	height: calc(100vh - 40px);
+	display: flex;
+	align-items: center;
+
+	@media (max-width: 768px) {
+		margin-top: 40px;
+	}
 
 	.intro-wrapper {
-		position: absolute;
-		left: auto;
 		width: 50%;
-		bottom: 20%;
+
+		@media (max-width: 768px) {
+			width: 100%;
+		}
 
 		.intro-name {
 			color: #878a8f;
 			letter-spacing: 0.4em;
 			font-size: 0.875rem;
 			text-transform: uppercase;
+
+			@media (max-width: 768px) {
+				font-size: 0.875rem;
+			}
 		}
 		.intro-role {
 			text-transform: capitalize;
 			margin: 20px 0;
 			font-size: 3.875rem;
 			line-height: 4.0625rem;
+
+			@media (max-width: 768px) {
+				font-size: 2.125rem;
+				margin: 0;
+			}
 		}
 		.intro-description {
 			font-size: 1.375rem;
 			line-height: 1.875rem;
 			color: #878a8f;
+
+			@media (max-width: 768px) {
+				font-size: 1.125rem;
+			}
 		}
 
 		.intro-extra {
 			margin-top: 20px;
+
 			a {
 				text-decoration: none;
 				color: #0f141e;
