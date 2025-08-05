@@ -1,34 +1,10 @@
 "use client";
 import { introduction, menuItems } from "@/data";
 import { Flex, Grid, Typography } from "antd";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence, Variants, Transition } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { usePageTransition } from "@/hooks/usePageTransition";
-
-interface NavbarTitleProps {
-	isActive: boolean;
-}
-
-interface MenuButtonProps {
-	isActive: boolean;
-	isAnimating: boolean;
-	onClick: () => void;
-}
-
-interface MenuOverlayProps {
-	isActive: boolean;
-	onExitComplete: () => void;
-}
-
-interface MenuContentProps {
-	isActive: boolean;
-	loading: boolean;
-	path: string;
-	onAnimationStart: () => void;
-	onAnimationComplete: () => void;
-	onClick: (path: string, blank: boolean) => void;
-}
 
 interface AnimationVariants {
 	menuContent: Variants;
@@ -203,37 +179,55 @@ const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 
 	return (
 		<Flex
-			vertical
 			style={{
 				opacity: isHovered ? 0.7 : 1,
 				cursor: isHovered ? "pointer" : "",
 				transition: "opacity 0.3s ease",
-				display: !screens.md ? "none" : "flex",
 			}}
+			gap={12}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 			onClick={handleTitleClick}
 		>
-			<Typography.Text
-				className="font-extrabold nav-title"
-				style={{
-					color: isActive ? "#878a8f" : "",
-					transition: "color 0.3s ease",
-					transitionDelay: isActive ? "0.4s" : "0s",
-				}}
-			>
-				{introduction.name}
-			</Typography.Text>
-			<Typography.Text
-				className="font-medium nav-subtitle"
-				style={{
-					color: isActive ? "#878a8f" : "",
-					transition: "color 0.3s ease",
-					transitionDelay: isActive ? "0.4s" : "0s",
-				}}
-			>
-				{introduction.role}
-			</Typography.Text>
+			<Flex justify="center" align="center">
+				<Flex
+					justify="center"
+					align="center"
+					style={{
+						width: "2.5rem",
+						height: "2.5rem",
+						borderRadius: "50%",
+						border: `3px solid ${isActive ? "#878a8f" : "#000"}`,
+						color: isActive ? "#878a8f" : "",
+						transition: "color 0.3s ease, border 0.3 ease",
+						transitionDelay: isActive ? "0.4s" : "0s",
+					}}
+				>
+					<h1 className="font-bold text-reg">S</h1>
+				</Flex>
+			</Flex>
+			<Flex justify="center" vertical>
+				<Typography.Text
+					className="font-extrabold nav-title"
+					style={{
+						color: isActive ? "#878a8f" : "",
+						transition: "color 0.3s ease",
+						transitionDelay: isActive ? "0.4s" : "0s",
+					}}
+				>
+					{screens.md ? introduction.name : "Sangkan Faiq"}
+				</Typography.Text>
+				<Typography.Text
+					className="font-medium nav-subtitle"
+					style={{
+						color: isActive ? "#878a8f" : "",
+						transition: "color 0.3s ease",
+						transitionDelay: isActive ? "0.4s" : "0s",
+					}}
+				>
+					{screens.md ? introduction.role : "FE Developer"}
+				</Typography.Text>
+			</Flex>
 		</Flex>
 	);
 };
@@ -241,7 +235,7 @@ const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 const MenuButton: React.FC<{ isActive: boolean; isAnimating: boolean; onClick: () => void }> = ({ isActive, isAnimating, onClick }) => {
 	const screens = Grid.useBreakpoint();
 	return (
-		<Flex className="menu-wrap" onClick={isAnimating ? undefined : onClick}>
+		<Flex gap="small" className="menu-wrap" onClick={isAnimating ? undefined : onClick}>
 			<h1
 				className="font-bold menu-text"
 				style={{
@@ -381,7 +375,7 @@ const Navbar: React.FC = () => {
 
 	return (
 		<>
-			<Flex justify={!screens.md ? "flex-end" : "space-between"} className="navbar-section">
+			<Flex justify={"space-between"} className="navbar-section">
 				<NavbarTitle isActive={isActive} />
 				<MenuButton isActive={isActive} isAnimating={isAnimating} onClick={handleMenu} />
 			</Flex>
