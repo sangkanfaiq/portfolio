@@ -375,7 +375,11 @@ const Navbar: React.FC = () => {
 
 	return (
 		<>
-			<Flex justify={"space-between"} className="navbar-section">
+			<Flex
+				justify={"space-between"}
+				className="navbar-section"
+				style={{ backgroundColor: isActive || isTransitioning ? "transparent" : "#fff", transitionDelay: isActive || isTransitioning ? "0s" : "0.5s" }}
+			>
 				<NavbarTitle isActive={isActive} />
 				<MenuButton isActive={isActive} isAnimating={isAnimating} onClick={handleMenu} />
 			</Flex>
