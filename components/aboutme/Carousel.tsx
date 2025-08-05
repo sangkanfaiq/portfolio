@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Carousel } from "antd";
+import { Carousel, Grid } from "antd";
 import type { CarouselRef } from "antd/es/carousel";
 import { carouselImage } from "@/data";
 import Aos from "aos";
@@ -7,6 +7,7 @@ import Aos from "aos";
 const CarouselSection: React.FC = () => {
 	const carouselRef = useRef<CarouselRef>(null);
 	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const screens = Grid.useBreakpoint()
 
 	useEffect(() => {
 		Aos.init({
@@ -24,7 +25,7 @@ const CarouselSection: React.FC = () => {
 	};
 
 	return (
-		<section style={{ padding: "130px 0" }} data-aos="fade-up" data-aos-delay="350" data-aos-offset="-100">
+		<section style={{ padding: screens.md ? "130px 0" : "72px 0" }} data-aos="fade-up" data-aos-delay="350" data-aos-offset="-100">
 			<div>
 				<Carousel ref={carouselRef} autoplay dots={false} beforeChange={handleSlideChange}>
 					{carouselImage.map((item: string, index: number) => (
