@@ -4,6 +4,9 @@
 	margin: 0;
 }
 
+$pulseSize: 4.5em;
+$pulseTiming: 1.2s;
+
 .body-side {
 	padding: 40px;
 
@@ -98,7 +101,7 @@
 	}
 
 	.hamburger {
-		padding: 15px 0 15px 15px;
+		padding: 15px 0 15px 0;
 
 		.hamburger-box {
 			width: 30px;
@@ -201,19 +204,18 @@
 	}
 }
 
-.loader {
-	width: 30px;
-	aspect-ratio: 1;
-	border-radius: 50%;
-	background: #ffffffc5; /* No visible center dot */
-	box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
-	animation: l1 1s infinite;
+.pulseLoader {
+  width: $pulseSize;
+  height: $pulseSize;
+  border-radius: $pulseSize;
+  background-color: white;
+  outline: 1px solid transparent;
+  animation: pulseanim $pulseTiming ease-in-out infinite;
 }
 
-@keyframes l1 {
-	100% {
-		box-shadow: 0 0 0 30px rgba(255, 255, 255, 0); /* Pulse fades out */
-	}
+@keyframes pulseanim {
+  0% { transform: scale(0); opacity: 0.8;}
+  100% { transform: scale(1); opacity: 0;}
 }
 
 .monochrome {
