@@ -25,7 +25,7 @@ const CarouselSection: React.FC = () => {
 	};
 
 	return (
-		<section style={{ padding: screens.md ? "130px 0" : "72px 0" }} data-aos="fade-up" data-aos-delay="350" data-aos-offset="-100">
+		<section style={{ padding: screens.md ? "130px 0" : "72px 0" }} data-aos="fade-up" data-aos-delay="800" data-aos-offset="-100">
 			<div>
 				<Carousel ref={carouselRef} autoplay dots={false} beforeChange={handleSlideChange}>
 					{carouselImage.map((item: string, index: number) => (
