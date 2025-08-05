@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Flex, Grid, Typography } from "antd";
 import React, { useEffect } from "react";
 import AOS from "aos";
 
@@ -9,6 +9,7 @@ interface DescriptionInterface {
 }
 
 const DescriptionChildren = ({ title, description, subdescription }: DescriptionInterface) => {
+	const screens = Grid.useBreakpoint();
 	useEffect(() => {
 		AOS.init({
 			once: true,
@@ -16,12 +17,12 @@ const DescriptionChildren = ({ title, description, subdescription }: Description
 	}, []);
 	return (
 		<Flex justify="center" align="center" vertical data-aos="fade-up" data-aos-offset="50" data-aos-duration="1000">
-			<Flex vertical align="center" style={{ textAlign: "center" }}>
+			<Flex vertical align={screens.md ? "center" : "flex-start"} style={{ textAlign: screens.md ? "center" : "left" }}>
 				<Typography.Text className="font-regular text-xs color-secondary">{title}</Typography.Text>
-				<h1 className="font-bold text-med color-primary" style={{ width: "80%", marginTop: 5 }}>
+				<h1 className="font-bold text-med color-primary" style={{ width: screens.md ? "80%" : "100%", marginTop: 5 }}>
 					{description}
 				</h1>
-				<p className="font-medium text-reg color-secondary" style={{ width: "70%", marginTop: 25 }}>
+				<p className="font-medium text-reg color-secondary" style={{ width: screens.md ? "70%" : "100%", marginTop: 25 }}>
 					{subdescription}
 				</p>
 			</Flex>
