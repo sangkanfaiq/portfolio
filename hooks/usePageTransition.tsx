@@ -21,7 +21,9 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 	const [isLoading, setIsLoading] = useState(false);
 	const [targetPath, setTargetPath] = useState("");
 	const [showText, setShowText] = useState(false);
+	const [isTextExiting, setIsTextExiting] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const textExitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const [isFirstVisit, setIsFirstVisit] = useState(true);
 	const router = useRouter();
 	const pathname = usePathname();
@@ -35,14 +37,26 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 				setIsLoading(true);
 
 				timeoutRef.current = setTimeout(() => {
-					setIsLoading(false);
-					setIsTransitioning(false);
-					setShowText(false);
-					setIsFirstVisit(false);
-				}, 2000); 
+					// Start text exit animation first
+					setIsTextExiting(true);
+
+					// Hide text after animation completes (300ms)
+					textExitTimeoutRef.current = setTimeout(() => {
+						setShowText(false);
+						setIsTextExiting(false);
+						setIsLoading(false);
+						setIsTransitioning(false);
+						setIsFirstVisit(false);
+					}, 200);
+				}, 2000);
 			}, 100);
 
-			return () => clearTimeout(timer);
+			return () => {
+				clearTimeout(timer);
+				if (textExitTimeoutRef.current) {
+					clearTimeout(textExitTimeoutRef.current);
+				}
+			};
 		}
 	}, [isFirstVisit, pathname]);
 
@@ -83,6 +97,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 			setIsLoading(false);
 			setIsTransitioning(false);
 			setShowText(false);
+			setIsTextExiting(false);
 		}
 	}, [pathname]);
 
@@ -91,15 +106,20 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current);
 			}
+			if (textExitTimeoutRef.current) {
+				clearTimeout(textExitTimeoutRef.current);
+			}
 		};
 	}, []);
 
 	const navigateWithTransition = (path: string, blank: boolean = false) => {
 		if (isTransitioning) return;
 		setShowText(false);
+		setIsTextExiting(false);
 		setTargetPath(path);
 		setIsTransitioning(true);
 		setIsLoading(true);
+
 		timeoutRef.current = setTimeout(() => {
 			if (blank) {
 				window.open(path, "_blank");
@@ -107,10 +127,25 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 				setIsTransitioning(false);
 			} else {
 				if (path === pathname) {
-					setIsLoading(false);
-					setIsTransitioning(false);
+					// Start text exit animation first
+					setIsTextExiting(true);
+
+					textExitTimeoutRef.current = setTimeout(() => {
+						setShowText(false);
+						setIsTextExiting(false);
+
+						setIsLoading(false);
+						setIsTransitioning(false);
+					}, 200);
 				} else {
-					router.push(path);
+					// Start text exit animation first
+					setIsTextExiting(true);
+
+					textExitTimeoutRef.current = setTimeout(() => {
+						setShowText(false);
+						setIsTextExiting(false);
+						router.push(path);
+					}, 200);
 				}
 			}
 		}, 1500);
@@ -131,7 +166,13 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 	return (
 		<PageTransitionContext.Provider value={{ navigateWithTransition, isTransitioning }}>
 			{children}
-			<AnimatePresence mode="wait" onExitComplete={() => setShowText(false)}>
+			<AnimatePresence
+				mode="wait"
+				onExitComplete={() => {
+					setShowText(false);
+					setIsTextExiting(false);
+				}}
+			>
 				{isTransitioning && (
 					<motion.div
 						key="overlay"
@@ -152,7 +193,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 							alignItems: "center",
 							justifyContent: "center",
 							backgroundRepeat: "no-repeat",
-							backgroundSize: 'cover'
+							backgroundSize: "cover",
 						}}
 					>
 						<div
@@ -170,6 +211,9 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 						<Loader />
 					</motion.div>
 				)}
+			</AnimatePresence>
+
+			<AnimatePresence mode="wait">
 				{isLoading && showText && (
 					<motion.div
 						key="transition-text"
@@ -183,9 +227,15 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 							zIndex: 1000,
 						}}
 						initial={{ y: 20, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						exit={{ y: -20, opacity: 0 }}
-						transition={{ duration: 0.25, ease: "easeOut" }}
+						animate={{
+							y: isTextExiting ? -20 : 0,
+							opacity: isTextExiting ? 0 : 1,
+						}}
+						exit={{ y: -40, opacity: 0 }}
+						transition={{
+							duration: 0.25,
+							ease: "easeOut",
+						}}
 					>
 						<Typography.Text
 							className="font-regular text-xs"
