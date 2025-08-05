@@ -151,6 +151,8 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 							display: "flex",
 							alignItems: "center",
 							justifyContent: "center",
+							backgroundRepeat: "no-repeat",
+							backgroundSize: 'cover'
 						}}
 					>
 						<div
