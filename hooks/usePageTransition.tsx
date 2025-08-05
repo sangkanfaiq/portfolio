@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Typography } from "antd";
+import { Grid, Typography } from "antd";
 import Loader from "@/components/Loader";
 
 interface PageTransitionContextType {
@@ -22,8 +22,29 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 	const [targetPath, setTargetPath] = useState("");
 	const [showText, setShowText] = useState(false);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const [isFirstVisit, setIsFirstVisit] = useState(true);
 	const router = useRouter();
 	const pathname = usePathname();
+	const screens = Grid.useBreakpoint();
+
+	useEffect(() => {
+		if (isFirstVisit && pathname === "/") {
+			const timer = setTimeout(() => {
+				setTargetPath("/");
+				setIsTransitioning(true);
+				setIsLoading(true);
+
+				timeoutRef.current = setTimeout(() => {
+					setIsLoading(false);
+					setIsTransitioning(false);
+					setShowText(false);
+					setIsFirstVisit(false);
+				}, 2000); 
+			}, 100);
+
+			return () => clearTimeout(timer);
+		}
+	}, [isFirstVisit, pathname]);
 
 	useEffect(() => {
 		if (isTransitioning) {
@@ -61,7 +82,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 		if (isLoading) {
 			setIsLoading(false);
 			setIsTransitioning(false);
-			setShowText(false); // ⬅️ reset state supaya tidak muncul langsung di transisi selanjutnya
+			setShowText(false);
 		}
 	}, [pathname]);
 
@@ -140,7 +161,7 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 								width: "100%",
 								height: "100%",
 								backgroundColor: "#0f141e",
-								opacity: .95,
+								opacity: 0.95,
 								zIndex: -1,
 							}}
 						/>
@@ -153,8 +174,8 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 						style={{
 							color: "#fff",
 							position: "fixed",
-							bottom: 40,
-							left: 40,
+							bottom: screens.md ? 40 : 20,
+							left: screens.md ? 40 : 20,
 							display: "flex",
 							flexDirection: "column",
 							zIndex: 1000,
