@@ -46,18 +46,44 @@ export const metadata: Metadata = {
 	title: "Portfolio | Sangkan Faiq Akhsan Musafa",
 	description:
 		"Explore the professional portfolio of Sangkan Faiq Akhsan Musafa — a Frontend Developer specializing in Next.js, React.js, and modern web development. View projects, skills, and experience.",
-	keywords: ["Frontend Developer", "Sangkan Faiq", "Next.js Developer", "React.js Developer", "Web Developer Portfolio", "JavaScript", "TypeScript", "UI Developer", "Modern Web Development"],
-	authors: [{ name: "Sangkan Faiq Akhsan Musafa" }],
+	keywords: [
+		"Frontend Developer",
+		"Sangkan Faiq",
+		"Sangkan Faiq Akhsan Musafa",
+		"Next.js Developer",
+		"React.js Developer",
+		"Web Developer Portfolio",
+		"JavaScript",
+		"TypeScript",
+		"UI Developer",
+		"Modern Web Development",
+	],
+	authors: [{ name: "Sangkan Faiq Akhsan Musafa", url: "https://sangkanfaiq.vercel.app" }],
 	creator: "Sangkan Faiq Akhsan Musafa",
-	robots: "index, follow",
+	publisher: "Sangkan Faiq Akhsan Musafa",
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			noimageindex: false,
+		},
+	},
+	metadataBase: new URL("https://sangkanfaiq.vercel.app"), // your custom domain
 	openGraph: {
 		title: "Frontend Developer Portfolio | Sangkan Faiq Akhsan Musafa",
-		description: "Professional portfolio showcasing projects and experience of Sangkan Faiq — expert in Next.js and React.js development.",
+		description:
+			"Professional portfolio showcasing projects and experience of Sangkan Faiq — expert in Next.js and React.js development.",
+		url: "https://sangkanfaiq.vercel.app",
 		siteName: "Sangkan Faiq Portfolio",
 		type: "website",
 		locale: "en_US",
 	},
+	category: "technology",
 };
+
 
 export default function RootLayout({
 	children,
