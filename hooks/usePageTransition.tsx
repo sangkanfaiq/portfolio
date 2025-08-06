@@ -6,7 +6,7 @@ import { Grid, Typography } from "antd";
 import Loader from "@/components/Loader";
 
 interface PageTransitionContextType {
-	navigateWithTransition: (path: string, blank?: boolean) => void;
+	navigateWithTransition: (path: string, blank?: boolean, disableTransition?: boolean) => void;
 	isTransitioning: boolean;
 }
 
@@ -113,8 +113,18 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 		};
 	}, []);
 
-	const navigateWithTransition = (path: string, blank: boolean = false) => {
+	const navigateWithTransition = (path: string, blank: boolean = false, disableTransition: boolean = false) => {
 		if (isTransitioning) return;
+
+		if (disableTransition) {
+			if (blank) {
+				window.open(path, "_blank");
+			} else {
+				router.push(path);
+			}
+			return;
+		}
+
 		setShowText(false);
 		setIsTextExiting(false);
 		setTargetPath(path);
@@ -128,20 +138,15 @@ export const PageTransitionProvider: React.FC<PageTransitionProviderProps> = ({ 
 				setIsTransitioning(false);
 			} else {
 				if (path === pathname) {
-					// Start text exit animation first
 					setIsTextExiting(true);
-
 					textExitTimeoutRef.current = setTimeout(() => {
 						setShowText(false);
 						setIsTextExiting(false);
-
 						setIsLoading(false);
 						setIsTransitioning(false);
 					}, 200);
 				} else {
-					// Start text exit animation first
 					setIsTextExiting(true);
-
 					textExitTimeoutRef.current = setTimeout(() => {
 						setShowText(false);
 						setIsTextExiting(false);
