@@ -1,6 +1,8 @@
 export const introduction = {
-	name: "sangkan faiq Akhsan musafa",
+	fullname: "sangkan faiq Akhsan musafa",
+	nickname: "sangkan faiq",
 	role: "frontend developer",
+	shortrole: "FE Developer",
 	description: `Over the past few years, I’ve helped businesses deliver impactful digital experiences by building fast, responsive, and user-centric web applications with technologies like
 					React.js and Next.js. I thrive on solving complex problems and turning ideas into clean, maintainable code that scales.`,
 };
@@ -35,7 +37,7 @@ export const experiencesCompany = [
 	},
 	{
 		id: 3,
-		company: "PT Summit Global Teknologi",
+		company: "PT Summit Global Technology",
 		role: "Junior Frontend Engineer",
 		start: "April 2023",
 		end: "September 2023"
@@ -59,14 +61,14 @@ export const menuItems = [
 		path: "/aboutme",
 		blank: false,
 	},
-	{
-		name: "Contact",
-		path: "/contact",
-		blank: false,
-	},
-	{
-		name: "Instagram",
-		path: "https://www.instagram.com/sangkanfaiq/#",
-		blank: true,
-	},
+	// {
+	// 	name: "Contact",
+	// 	path: "/contact",
+	// 	blank: false,
+	// },
+	// {
+	// 	name: "Instagram",
+	// 	path: "https://www.instagram.com/sangkanfaiq/#",
+	// 	blank: true,
+	// },
 ];
