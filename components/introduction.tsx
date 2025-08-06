@@ -6,7 +6,7 @@ import { motion, Variants } from "framer-motion";
 
 const Introduction = () => {
 	const { navigateWithTransition, isTransitioning } = usePageTransition();
-	const [shouldShowContent, setShouldShowContent] = useState(false);
+	const [shouldShowContent, setShouldShowContent] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!isTransitioning) {
@@ -24,7 +24,7 @@ const Introduction = () => {
 		e.preventDefault();
 		navigateWithTransition(path);
 	};
-	
+
 	const containerVariants: Variants = {
 		hidden: { opacity: 0 },
 		visible: {
@@ -36,17 +36,17 @@ const Introduction = () => {
 	};
 
 	const itemVariants: Variants = {
-		hidden: { 
-			opacity: 0, 
-			y: 20 
+		hidden: {
+			opacity: 0,
+			y: 20,
 		},
-		visible: { 
-			opacity: 1, 
+		visible: {
+			opacity: 1,
 			y: 0,
 			transition: {
 				duration: 0.4,
-				ease: [0.25, 0.46, 0.45, 0.94]
-			}
+				ease: [0.25, 0.46, 0.45, 0.94],
+			},
 		},
 	};
 
@@ -60,34 +60,17 @@ const Introduction = () => {
 
 	return (
 		<section className="intro">
-			<motion.div 
-				className="intro-wrapper"
-				variants={containerVariants}
-				initial="hidden"
-				animate="visible"
-			>
-				<motion.p 
-					variants={itemVariants}
-					className="font-regular intro-name"
-				>
-					{introduction.name}
+			<motion.div className="intro-wrapper" variants={containerVariants} initial="hidden" animate="visible">
+				<motion.p variants={itemVariants} className="font-regular intro-name">
+					{introduction.fullname}
 				</motion.p>
-				<motion.h1 
-					variants={itemVariants}
-					className="font-bold intro-role"
-				>
+				<motion.h1 variants={itemVariants} className="font-bold intro-role">
 					{introduction.role}
 				</motion.h1>
-				<motion.p 
-					variants={itemVariants}
-					className="font-medium intro-description"
-				>
+				<motion.p variants={itemVariants} className="font-medium intro-description">
 					{introduction.description}
 				</motion.p>
-				<motion.div 
-					variants={itemVariants}
-					className="intro-extra"
-				>
+				<motion.div variants={itemVariants} className="intro-extra">
 					<a href="/projects" className="font-extrabold" onClick={(e) => handleNavigation("/", e)} style={{ cursor: "pointer" }}>
 						View Projects
 					</a>
