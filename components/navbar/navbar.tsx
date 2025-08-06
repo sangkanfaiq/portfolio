@@ -1,136 +1,14 @@
 "use client";
-import { introduction, menuItems } from "@/data";
+import { introduction } from "@/data";
 import { Flex, Grid, Typography } from "antd";
 import React, { useEffect, useState, useCallback } from "react";
-import { motion, AnimatePresence, Variants, Transition } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { usePageTransition } from "@/hooks/usePageTransition";
-
-interface AnimationVariants {
-	menuContent: Variants;
-	menuItem: Variants;
-	menuLabel: Variants;
-}
-
-interface OverlayAnimation {
-	initial: { y: string };
-	animate: { y: string };
-	exit: { y: string };
-	transition: Transition;
-}
-
-interface StylesConfig {
-	overlay: React.CSSProperties;
-	menuContent: React.CSSProperties;
-	menuLabel: React.CSSProperties;
-	menuItem: React.CSSProperties;
-	menuList: React.CSSProperties;
-}
-
-const ANIMATION_VARIANTS: AnimationVariants = {
-	menuContent: {
-		hidden: { opacity: 0 },
-		visible: {
-			opacity: 1,
-			transition: {
-				when: "beforeChildren",
-				staggerChildren: 0.05,
-				delayChildren: 0.05,
-				duration: 0.3,
-			},
-		},
-		exit: {
-			opacity: 0,
-			transition: {
-				duration: 0.2,
-				ease: "easeIn",
-				when: "afterChildren",
-			},
-		},
-	},
-	menuItem: {
-		hidden: { opacity: 0, x: -50 },
-		visible: {
-			opacity: 1,
-			x: 0,
-			transition: {
-				duration: 0.4,
-				ease: "easeOut",
-			},
-		},
-		exit: {
-			opacity: 0,
-			transition: {
-				ease: "easeIn",
-			},
-		},
-	},
-	menuLabel: {
-		hidden: { opacity: 0 },
-		visible: {
-			opacity: 1,
-			transition: {
-				duration: 0.4,
-				ease: "easeOut",
-			},
-		},
-		exit: {
-			opacity: 0,
-			transition: { duration: 0.2, ease: "easeIn" },
-		},
-	},
-};
-
-const OVERLAY_ANIMATION: OverlayAnimation = {
-	initial: { y: "100%" },
-	animate: { y: "0%" },
-	exit: { y: "-100%" },
-	transition: {
-		duration: 0.5,
-		ease: "easeInOut",
-	},
-};
-
-const STYLES: StylesConfig = {
-	overlay: {
-		width: "100%",
-		position: "fixed" as const,
-		height: "100vh",
-		left: 0,
-		top: 0,
-		backgroundColor: "#0f141e",
-		zIndex: 990,
-	},
-	menuContent: {
-		width: "100%",
-		height: "100%",
-		position: "fixed" as const,
-		top: 0,
-		left: 0,
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		zIndex: 998,
-	},
-	menuLabel: {
-		color: "#878a8f",
-		marginBottom: "20px",
-		letterSpacing: ".4em",
-		fontSize: ".875rem",
-	},
-	menuItem: {
-		cursor: "pointer",
-		color: "#878a8f",
-	},
-	menuList: {
-		listStyle: "none" as const,
-		textAlign: "center" as const,
-		paddingTop: "8px",
-		paddingBottom: "2px",
-		padding: 0,
-		margin: 0,
-	},
-};
+import { NavbarTitle } from "./NavbarTitle";
+import { MenuButton } from "./NavbarButton";
+import { MenuOverlay } from "./MenuOverlay";
+import { MenuContent } from "./MenuContent";
+import { AnimatePresence, motion } from "framer-motion";
+import Loader from "../Loader";
 
 const useScrollLock = (isLocked: boolean): void => {
 	useEffect(() => {
@@ -166,185 +44,15 @@ const useScrollLock = (isLocked: boolean): void => {
 	}, [isLocked]);
 };
 
-const NavbarTitle: React.FC<{ isActive: boolean }> = ({ isActive }) => {
-	const [isHovered, setIsHovered] = useState(false);
-	const { navigateWithTransition } = usePageTransition();
-	const screens = Grid.useBreakpoint();
-
-	const handleTitleClick = () => {
-		if (!isActive) {
-			navigateWithTransition("/");
-		}
-	};
-
-	return (
-		<Flex
-			style={{
-				opacity: isHovered ? 0.7 : 1,
-				cursor: isHovered ? "pointer" : "",
-				transition: "opacity 0.3s ease",
-			}}
-			gap={12}
-			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
-			onClick={handleTitleClick}
-		>
-			<Flex justify="center" align="center">
-				<Flex
-					justify="center"
-					align="center"
-					style={{
-						width: "2.5rem",
-						height: "2.5rem",
-						borderRadius: "50%",
-						border: `3px solid ${isActive ? "#878a8f" : "#000"}`,
-						color: isActive ? "#878a8f" : "",
-						transition: "color 0.3s ease, border 0.3 ease",
-						transitionDelay: isActive ? "0.4s" : "0s",
-					}}
-				>
-					<h1 className="font-bold text-reg">S</h1>
-				</Flex>
-			</Flex>
-			<Flex justify="center" vertical>
-				<Typography.Text
-					className="font-extrabold nav-title"
-					style={{
-						color: isActive ? "#878a8f" : "",
-						transition: "color 0.3s ease",
-						transitionDelay: isActive ? "0.4s" : "0s",
-					}}
-				>
-					{screens.md ? introduction.name : "Sangkan Faiq"}
-				</Typography.Text>
-				<Typography.Text
-					className="font-medium nav-subtitle"
-					style={{
-						color: isActive ? "#878a8f" : "",
-						transition: "color 0.3s ease",
-						transitionDelay: isActive ? "0.4s" : "0s",
-					}}
-				>
-					{screens.md ? introduction.role : "FE Developer"}
-				</Typography.Text>
-			</Flex>
-		</Flex>
-	);
-};
-
-const MenuButton: React.FC<{ isActive: boolean; isAnimating: boolean; onClick: () => void }> = ({ isActive, isAnimating, onClick }) => {
-	const screens = Grid.useBreakpoint();
-	return (
-		<Flex gap="small" className="menu-wrap" onClick={isAnimating ? undefined : onClick}>
-			<h1
-				className="font-bold menu-text"
-				style={{
-					color: isActive ? "#878a8f" : "",
-					transition: "color 0.3s ease",
-					transitionDelay: isActive ? "0.4s" : "0s",
-					display: !screens.md ? "none" : "block",
-				}}
-			>
-				MENU
-			</h1>
-			<div className={`hamburger hamburger--collapse ${isActive ? "is-active" : ""}`}>
-				<div className="hamburger-box">
-					<div className={`hamburger-inner ${isActive ? "active" : ""}`}></div>
-				</div>
-			</div>
-		</Flex>
-	);
-};
-
-const MenuOverlay: React.FC<{ isActive: boolean; onExitComplete: () => void }> = ({ isActive, onExitComplete }) => (
-	<AnimatePresence mode="wait" onExitComplete={onExitComplete}>
-		{isActive && (
-			<motion.div
-				key="menu-overlay"
-				initial={OVERLAY_ANIMATION.initial}
-				animate={OVERLAY_ANIMATION.animate}
-				exit={OVERLAY_ANIMATION.exit}
-				transition={OVERLAY_ANIMATION.transition}
-				style={STYLES.overlay}
-			/>
-		)}
-	</AnimatePresence>
-);
-
-const MenuContent: React.FC<{
-	isActive: boolean;
-	onAnimationStart: () => void;
-	onAnimationComplete: () => void;
-	onClick: (path: string, blank: boolean) => void;
-}> = ({ isActive, onAnimationStart, onAnimationComplete, onClick }) => {
-	const pathname = usePathname();
-	const screens = Grid.useBreakpoint();
-
-	return (
-		<AnimatePresence
-			mode="wait"
-			onExitComplete={() => {
-				if (!isActive) {
-					onAnimationComplete();
-				}
-			}}
-		>
-			{isActive && (
-				<motion.div
-					key="menu-content"
-					variants={ANIMATION_VARIANTS.menuContent}
-					initial="hidden"
-					animate="visible"
-					exit="exit"
-					onAnimationStart={() => {
-						if (isActive) onAnimationStart();
-					}}
-					onAnimationComplete={(definition) => {
-						if (definition === "visible") {
-							onAnimationComplete();
-						}
-					}}
-					style={STYLES.menuContent}
-				>
-					<motion.div key="menu" initial={{ y: 0, opacity: 1 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
-						<Flex justify="center" vertical align="center" style={{ height: "100%" }}>
-							<motion.p className="font-regular" style={STYLES.menuLabel} variants={ANIMATION_VARIANTS.menuLabel}>
-								MENU
-							</motion.p>
-							{menuItems.map((item, index) => (
-								<motion.ul key={index} style={STYLES.menuList}>
-									<motion.li
-										className="font-extrabold"
-										variants={ANIMATION_VARIANTS.menuItem}
-										whileHover={{
-											color: "#fff",
-											transition: { duration: 0.1 },
-										}}
-										style={{
-											...STYLES.menuItem,
-											fontSize: screens.md ? "3.25rem" : "2.125rem",
-											color: pathname === item.path ? "#fff" : STYLES.menuItem.color,
-										}}
-										onClick={() => onClick(item.path, item.blank)}
-									>
-										{item.name}
-									</motion.li>
-								</motion.ul>
-							))}
-						</Flex>
-					</motion.div>
-				</motion.div>
-			)}
-		</AnimatePresence>
-	);
-};
-
 const Navbar: React.FC = () => {
 	const [isActive, setIsActive] = useState<boolean>(false);
 	const [isAnimating, setIsAnimating] = useState<boolean>(false);
+	const [isLoadingTextVisible, setIsLoadingTextVisible] = useState(false);
 	const { navigateWithTransition, isTransitioning } = usePageTransition();
+	const [pendingNavigation, setPendingNavigation] = useState<{ path: string; blank: boolean } | null>(null);
+	const [isFadingOut, setIsFadingOut] = useState(false);
+	const [targetPath, setTargetPath] = useState("");
 	const screens = Grid.useBreakpoint();
-
 	useScrollLock(isActive);
 
 	const handleMenu = useCallback(() => {
@@ -355,7 +63,12 @@ const Navbar: React.FC = () => {
 
 	const handleOverlayExitComplete = useCallback(() => {
 		setIsAnimating(false);
-	}, []);
+		if (pendingNavigation) {
+			navigateWithTransition(pendingNavigation.path, pendingNavigation.blank, true);
+			setPendingNavigation(null);
+		}
+		setIsLoadingTextVisible(false);
+	}, [navigateWithTransition, pendingNavigation]);
 
 	const handleAnimationStart = useCallback(() => {
 		setIsAnimating(true);
@@ -367,24 +80,121 @@ const Navbar: React.FC = () => {
 
 	const handleRedirect = useCallback(
 		(path: string, blank: boolean) => {
-			setIsActive(false);
-			navigateWithTransition(path, blank);
+			if (isAnimating || isTransitioning) return;
+			setTargetPath(path);
+			setIsLoadingTextVisible(true);
+			setIsFadingOut(false);
+			const minimumLoading = new Promise<void>((resolve) => setTimeout(resolve, 2000));
+			const navigationTrigger = new Promise<void>((resolve) => {
+				setTimeout(() => {
+					setIsFadingOut(true); 
+					setTimeout(() => {
+						setIsActive(false); 
+						setPendingNavigation({ path, blank });
+						resolve();
+					}, 400); 
+				}, 2000);
+			});
+
+			Promise.all([minimumLoading, navigationTrigger]).then(() => {
+				navigateWithTransition(path, blank, true);
+				setPendingNavigation(null);
+				setIsLoadingTextVisible(false);
+			});
 		},
-		[navigateWithTransition]
+		[isAnimating, isTransitioning, navigateWithTransition]
 	);
+
+	const renderPathname = () => {
+		if (targetPath === "/aboutme") return "about me";
+		if (targetPath === "/contact") return "contact";
+		return "welcome";
+	};
+
+	const renderSubtitle = () => {
+		if (targetPath === "/aboutme") return "Frontend Developer";
+		if (targetPath === "/contact") return "Get in touch";
+		return "Wait a bit";
+	};
 
 	return (
 		<>
-			<Flex
-				justify={"space-between"}
-				className="navbar-section"
-				style={{ backgroundColor: isActive || isTransitioning ? "transparent" : "#fff", transitionDelay: isActive || isTransitioning ? "0s" : "0.5s" }}
-			>
-				<NavbarTitle isActive={isActive} />
-				<MenuButton isActive={isActive} isAnimating={isAnimating} onClick={handleMenu} />
+			<Flex justify={"space-between"} className={`navbar-section ${isActive || isTransitioning || isAnimating ? "transparent" : ""}`}>
+				<NavbarTitle data={introduction} isActive={isActive} />
+				<MenuButton isActive={isActive} isAnimating={isAnimating} isLoadingTextVisible={isLoadingTextVisible} onClick={handleMenu} />
 			</Flex>
 			<MenuOverlay isActive={isActive} onExitComplete={handleOverlayExitComplete} />
-			<MenuContent isActive={isActive} onAnimationStart={handleAnimationStart} onAnimationComplete={handleAnimationComplete} onClick={handleRedirect} />
+
+			<AnimatePresence>
+				{isLoadingTextVisible && (
+					<motion.div
+						key="loading-text"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: isFadingOut ? 0 : 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.4 }}
+						style={{
+							position: "fixed",
+							inset: 0,
+							zIndex: 9999,
+							pointerEvents: "none",
+						}}
+					>
+						<div
+							style={{
+								position: "absolute",
+								top: "50%",
+								left: "50%",
+								transform: "translate(-50%, -50%)",
+							}}
+						>
+							<Loader />
+						</div>
+						<AnimatePresence mode="wait">
+							{!isFadingOut && (
+								<motion.div
+									key="transition-text"
+									style={{
+										color: "#fff",
+										position: "absolute",
+										bottom: screens.md ? 40 : 20,
+										left: screens.md ? 40 : 20,
+										display: "flex",
+										flexDirection: "column",
+										zIndex: 1000,
+									}}
+									initial={{ y: 20, opacity: 0 }}
+									animate={{ y: 0, opacity: 1 }}
+									exit={{ y: -40, opacity: 0 }}
+									transition={{ duration: 0.25, ease: "easeOut" }}
+								>
+									<Typography.Text
+										className="font-regular text-xs"
+										style={{
+											textTransform: "uppercase",
+											letterSpacing: ".4em",
+											color: "#e7e8e9",
+										}}
+									>
+										{renderPathname()}
+									</Typography.Text>
+									<Typography.Text className="font-extrabold text-lg" style={{ color: "#e7e8e9" }}>
+										{renderSubtitle()}
+									</Typography.Text>
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</motion.div>
+				)}
+			</AnimatePresence>
+
+			<MenuContent
+				isActive={isActive}
+				isLoadingTextVisible={isLoadingTextVisible}
+				onAnimationStart={handleAnimationStart}
+				onAnimationComplete={handleAnimationComplete}
+				onClick={handleRedirect}
+			/>
 		</>
 	);
 };
