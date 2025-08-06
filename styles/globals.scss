@@ -4,10 +4,10 @@
 	margin: 0;
 }
 
-$pulseSize: 4.5em;
-$pulseTiming: 1.2s;
+$pulseSize: 3em;
+$pulseTiming: 1s;
 
-.body-side {
+.body-app {
 	padding: 40px;
 
 	@media (max-width: 768px) {
@@ -56,6 +56,10 @@ $pulseTiming: 1.2s;
 .text-xs {
 	font-size: 0.875rem;
 	letter-spacing: 0.4em;
+
+	@media (max-width: 768px) {
+		letter-spacing: 0.3em;
+	}
 }
 .text-sm {
 	font-size: 1.125rem;
@@ -86,18 +90,24 @@ $pulseTiming: 1.2s;
 	top: 0;
 	padding: 40px 40px 0 40px;
 	width: 100%;
+	background-color: #fff;
+	transition: background-color 0.4s ease;
 
 	@media (max-width: 768px) {
 		padding: 12px;
 	}
 
 	.nav-title {
-		font-size: 16px;
+		font-size: 1em;
 	}
 
 	.nav-subtitle {
-		letter-spacing: 7.6px;
+		letter-spacing: 0.63em;
 		font-size: 12px;
+
+		@media (max-width: 768px) {
+			letter-spacing: 0.3em;
+		}
 	}
 
 	.hamburger {
@@ -135,6 +145,9 @@ $pulseTiming: 1.2s;
 		}
 	}
 }
+.navbar-section.transparent {
+	background-color: transparent;
+}
 
 .intro {
 	width: 100%;
@@ -161,6 +174,7 @@ $pulseTiming: 1.2s;
 
 			@media (max-width: 768px) {
 				font-size: 0.875rem;
+				letter-spacing: 0.3em;
 			}
 		}
 		.intro-role {
@@ -205,17 +219,23 @@ $pulseTiming: 1.2s;
 }
 
 .pulseLoader {
-  width: $pulseSize;
-  height: $pulseSize;
-  border-radius: $pulseSize;
-  background-color: white;
-  outline: 1px solid transparent;
-  animation: pulseanim $pulseTiming ease-in-out infinite;
+	width: $pulseSize;
+	height: $pulseSize;
+	border-radius: $pulseSize;
+	background-color: white;
+	outline: 1px solid transparent;
+	animation: pulseanim $pulseTiming ease-in-out infinite;
 }
 
 @keyframes pulseanim {
-  0% { transform: scale(0); opacity: 0.8;}
-  100% { transform: scale(1); opacity: 0;}
+	0% {
+		transform: scale(0);
+		opacity: 0.8;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 0;
+	}
 }
 
 .monochrome {
