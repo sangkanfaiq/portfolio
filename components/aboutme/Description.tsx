@@ -32,8 +32,8 @@ const Description = ({ title, description, subdescription }: DescriptionInterfac
 		visible: {
 			opacity: 1,
 			transition: {
+				delay: 0.2,
 				staggerChildren: 0.2,
-				delayChildren: 0.3,
 			},
 		},
 	};
@@ -41,7 +41,7 @@ const Description = ({ title, description, subdescription }: DescriptionInterfac
 	const ITEMS_VARIANT: Variants = {
 		hidden: {
 			opacity: 0,
-			y: 30,
+			y: 20,
 		},
 		visible: {
 			opacity: 1,
