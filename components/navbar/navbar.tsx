@@ -9,6 +9,7 @@ import { MenuOverlay } from "./MenuOverlay";
 import { MenuContent } from "./MenuContent";
 import { AnimatePresence, motion } from "framer-motion";
 import Loader from "../Loader";
+import OverlayLoading from "./OverlayLoading";
 
 const useScrollLock = (isLocked: boolean): void => {
 	useEffect(() => {
@@ -87,12 +88,12 @@ const Navbar: React.FC = () => {
 			const minimumLoading = new Promise<void>((resolve) => setTimeout(resolve, 2000));
 			const navigationTrigger = new Promise<void>((resolve) => {
 				setTimeout(() => {
-					setIsFadingOut(true); 
+					setIsFadingOut(true);
 					setTimeout(() => {
-						setIsActive(false); 
+						setIsActive(false);
 						setPendingNavigation({ path, blank });
 						resolve();
-					}, 400); 
+					}, 400);
 				}, 2000);
 			});
 
@@ -124,70 +125,7 @@ const Navbar: React.FC = () => {
 				<MenuButton isActive={isActive} isAnimating={isAnimating} isLoadingTextVisible={isLoadingTextVisible} onClick={handleMenu} />
 			</Flex>
 			<MenuOverlay isActive={isActive} onExitComplete={handleOverlayExitComplete} />
-
-			<AnimatePresence>
-				{isLoadingTextVisible && (
-					<motion.div
-						key="loading-text"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: isFadingOut ? 0 : 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.4 }}
-						style={{
-							position: "fixed",
-							inset: 0,
-							zIndex: 9999,
-							pointerEvents: "none",
-						}}
-					>
-						<div
-							style={{
-								position: "absolute",
-								top: "50%",
-								left: "50%",
-								transform: "translate(-50%, -50%)",
-							}}
-						>
-							<Loader />
-						</div>
-						<AnimatePresence mode="wait">
-							{!isFadingOut && (
-								<motion.div
-									key="transition-text"
-									style={{
-										color: "#fff",
-										position: "absolute",
-										bottom: screens.md ? 40 : 20,
-										left: screens.md ? 40 : 20,
-										display: "flex",
-										flexDirection: "column",
-										zIndex: 1000,
-									}}
-									initial={{ y: 20, opacity: 0 }}
-									animate={{ y: 0, opacity: 1 }}
-									exit={{ y: -40, opacity: 0 }}
-									transition={{ duration: 0.25, ease: "easeOut" }}
-								>
-									<Typography.Text
-										className="font-regular text-xs"
-										style={{
-											textTransform: "uppercase",
-											letterSpacing: ".4em",
-											color: "#e7e8e9",
-										}}
-									>
-										{renderPathname()}
-									</Typography.Text>
-									<Typography.Text className="font-extrabold text-lg" style={{ color: "#e7e8e9" }}>
-										{renderSubtitle()}
-									</Typography.Text>
-								</motion.div>
-							)}
-						</AnimatePresence>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
+			<OverlayLoading isFadingOut={isFadingOut} isLoadingTextVisible={isLoadingTextVisible} renderPathname={renderPathname} renderSubtitle={renderSubtitle} />
 			<MenuContent
 				isActive={isActive}
 				isLoadingTextVisible={isLoadingTextVisible}
