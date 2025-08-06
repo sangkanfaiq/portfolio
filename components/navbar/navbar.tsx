@@ -1,14 +1,12 @@
 "use client";
 import { introduction } from "@/data";
-import { Flex, Grid, Typography } from "antd";
+import { Flex, Grid } from "antd";
 import React, { useEffect, useState, useCallback } from "react";
 import { usePageTransition } from "@/hooks/usePageTransition";
 import { NavbarTitle } from "./NavbarTitle";
 import { MenuButton } from "./NavbarButton";
 import { MenuOverlay } from "./MenuOverlay";
 import { MenuContent } from "./MenuContent";
-import { AnimatePresence, motion } from "framer-motion";
-import Loader from "../Loader";
 import OverlayLoading from "./OverlayLoading";
 
 const useScrollLock = (isLocked: boolean): void => {
