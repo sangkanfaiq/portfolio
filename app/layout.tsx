@@ -69,10 +69,10 @@ export default function RootLayout({
 			lang="en"
 			className={`${HELVETICA_THIN.variable} ${HELVETICA_LIGHT.variable} ${HELVETICA_REGULAR.variable} ${HELVETICA_MEDIUM.variable} ${HELVETICA_BOLD.variable} ${HELVETICA_EXTRA_BOLD.variable} ${HELVETICA_BLACK.variable} ${HELVETICA_EXTRA_BLACK.variable}`}
 		>
-			<body>
+			<body className="body-app">
 				<PageTransitionProvider>
 					<Navbar />
-					<div className="body-side">{children}</div>
+					{children}
 				</PageTransitionProvider>
 			</body>
 		</html>
